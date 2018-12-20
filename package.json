@@ -1,0 +1,26 @@
+{
+  "name": "PLZ",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start src/js/app.js",
+    "stop": "pm2 stop app",
+    "restart": "pm2 restart app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/probakilla/ple_project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/probakilla/ple_project/issues"
+  },
+  "homepage": "https://github.com/probakilla/ple_project#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "pm2": "^3.2.4"
+  }
+}
