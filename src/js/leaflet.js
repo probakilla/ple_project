@@ -35,7 +35,7 @@ function onMapClick(e) {
 mymap.on('click', onMapClick);
 
 function devenirRiche() {
-    alert("Merci pour l'argent!")
+    alert("Swiggity swooty, your account is now empty!")
 }
 
 document.getElementById("btn").addEventListener("click", devenirRiche);
