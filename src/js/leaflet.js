@@ -1,6 +1,6 @@
 const mymap = L.map('mapid').setView([51.505, -0.09], 13);
 
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+L.tileLayer('../../dems/', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
         '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -36,6 +36,18 @@ mymap.on('click', onMapClick);
 
 function devenirRiche() {
     alert("Swiggity swooty, your account is now empty!")
+    L.tileLayer('../../zidane.jpg', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+        '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox.streets'
+}).addTo(mymap);
+}
+
+function zidaneMode() {
+     document.body.style.backgroundImage = "url('../../images/zidane_1.jpg')";
 }
 
 document.getElementById("btn").addEventListener("click", devenirRiche);
+document.getElementById("zidane-btn").addEventListener("click", zidaneMode);
