@@ -4,10 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "pm2 start src/js/app.js",
-    "stop": "pm2 stop app",
-    "restart": "pm2 restart app"
+    "start": "pm2 start src/js/app.js -f",
+    "stop": "pm2 stop app"
   },
   "repository": {
     "type": "git",
