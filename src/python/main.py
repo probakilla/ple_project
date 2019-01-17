@@ -1,11 +1,9 @@
-import math
 from PIL import Image
-# from colour import Color
 
-HIGHEST_HEIGHT = 2550
+HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
 
-LIST_COLOR = [(174,218,243), (52, 116, 23), (242, 200, 147), (214, 167, 87), (139, 81, 74), (254, 254, 254)]
+LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15), (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99), (247, 243, 149), (243, 185, 93), (202, 152, 63), (196, 132, 62), (162, 106, 57), (131, 82, 42), (106, 64, 32), (69, 46, 28), (50, 28, 14), (129, 96, 88), (158, 130, 126), (182, 159, 154), (207, 193, 190), (230, 221, 217), (241, 243, 240), (255, 255, 255)]
 
 def readDem (filename):
     test = []
@@ -32,55 +30,72 @@ def readDem (filename):
                 cpt +=1
         return test
 
-def echelle(color_begin, color_end, n_vals):
-    r1, g1, b1 = color_begin
-    r2, g2, b2 = color_end
-    degrade = []
-    etendue = n_vals - 1
-    for i in range(n_vals):
-        alpha = 1 - i / etendue
-        beta = i / etendue
-        r = int(r1 * alpha + r2 * beta)
-        g = int(g1 * alpha + g2 * beta)
-        b = int(b1 * alpha + b2 * beta)
-        degrade.append((r, g, b))
-    return degrade
+def getColor(array):
+    color = []
+    ocean_rgb = (16, 118, 217)
+    for i in range(array.__len__()):
+        if (test[i] > HIGHEST_HEIGHT or test[i] == 0):
+            tmp = ocean_rgb
+        elif (0 < test[i] <= 20):
+            tmp = LIST_COLOR[0]
+        elif (20 < test[i] <= 40):
+            tmp = LIST_COLOR[1]
+        elif (40 < test[i] <= 70):
+            tmp = LIST_COLOR[2]
+        elif (70 < test[i] <= 100):
+            tmp = LIST_COLOR[3]
+        elif (100 < test[i] <= 150):
+            tmp = LIST_COLOR[4]
+        elif (150 < test[i] <= 200):
+            tmp = LIST_COLOR[5]
+        elif (200 < test[i] <= 300):
+            tmp = LIST_COLOR[6]
+        elif (300 < test[i] <= 400):
+            tmp = LIST_COLOR[7]
+        elif (400 < test[i] <= 500):
+            tmp = LIST_COLOR[8]
+        elif (500 < test[i] <= 650):
+            tmp = LIST_COLOR[9]
+        elif (650 < test[i] <= 800):
+            tmp = LIST_COLOR[10]
+        elif (800 < test[i] <= 1000):
+            tmp = LIST_COLOR[11]
+        elif (1000 < test[i] <= 1250):
+            tmp = LIST_COLOR[12]
+        elif (1250 < test[i] <= 1500):
+            tmp = LIST_COLOR[13]
+        elif (1500 < test[i] <= 1750):
+            tmp = LIST_COLOR[14]
+        elif (1750 < test[i] <= 2000):
+            tmp = LIST_COLOR[15]
+        elif (2000 < test[i] <= 2300):
+            tmp = LIST_COLOR[16]
+        elif (2300 < test[i] <= 2600):
+            tmp = LIST_COLOR[17]
+        elif (2600 < test[i] <= 3000):
+            tmp = LIST_COLOR[18]
+        elif (3000 < test[i] <= 3500):
+            tmp = LIST_COLOR[19]
+        elif (3500 < test[i] <= 4000):
+            tmp = LIST_COLOR[20]
+        elif (4000 < test[i] <= 5000):
+            tmp = LIST_COLOR[21]
+        elif (5000 < test[i] <= 6000):
+            tmp = LIST_COLOR[22]
+        elif (6000 < test[i] < 7000):
+            tmp = LIST_COLOR[23]
+        elif (7000 < test[i]):
+            tmp = LIST_COLOR[24]
+        color.append(tmp)
+    return color
+        
 
-# im = Image.new('RGB', (1201, 1201))
-# ld = im.load()
-
-# def gaussian(x, a, b, c, d=0):
-#     return a * math.exp(-(x - b)**2 / (2 * c**2)) + d
 
 if __name__ == "__main__":
-    # listColor = []
-
-    # blanc = (255, 255, 255)
-    # bleu = (0, 0, 255)
-    # listColor = echelle(bleu, blanc, HIGHEST_HEIGHT)
-
-    # red = Color("black")
-    # colors = list(red.range_to(Color("white"),HIGHEST_HEIGHT))
-    # for c in colors:
-    #     listColor.append((int(c.red*255), int(c.green*255), int(c.blue*255)))
-
-    s = "./dems/N00E006.hgt"
+    s = "./dems/N45W001.hgt"
     b_string1 = s.encode('utf-8')
     test = readDem(b_string1)
-    listColor = []
-    for i in range(test.__len__()):
-        color = LIST_COLOR[0]
-        if test[i] > 0:
-            color = LIST_COLOR[1]
-        if test[i] >= 500:
-            color = LIST_COLOR[2]
-        if test[i] >= 1000:
-            color = LIST_COLOR[3]
-        if test[i] >= 1500:
-            color = LIST_COLOR[4]
-        if test[i] >= 2000:
-            color = LIST_COLOR[5]
-        listColor.append(color)
+    color = getColor(test)
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
-    img.putdata(listColor)
-    img.save('image.png')
+    img.putdata(color)
+    img.save('image.png') 
