@@ -7,8 +7,9 @@ LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
     (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99),
     (247, 243, 149), (243, 185, 93), (202, 152, 63), (196, 132, 62),
     (162, 106, 57), (131, 82, 42), (106, 64, 32), (69, 46, 28), (50, 28, 14),
-    (129, 96, 88), (158, 130, 126), (182, 159, 154), (207, 193, 190),
-    (230, 221, 217), (241, 243, 240), (255, 255, 255)]
+    (63, 39, 25), (74, 49, 34), (82, 56, 41), (96, 66, 52), (105, 77, 61),
+    (128, 100, 83), (145, 118, 102), (162, 138, 124), (185, 163, 153),
+    (195, 177, 167), (216, 206, 199), (230, 224, 220), (255, 255, 255)]
 
 def read_dem (filename):
     test = []
@@ -82,25 +83,37 @@ def getColor(array):
             tmp = LIST_COLOR[17]
         elif (2600 < test[i] <= 3000):
             tmp = LIST_COLOR[18]
-        elif (3000 < test[i] <= 3500):
+        elif (3000 < test[i] <= 3400):
             tmp = LIST_COLOR[19]
-        elif (3500 < test[i] <= 4000):
+        elif (3400 < test[i] <= 3800):
             tmp = LIST_COLOR[20]
-        elif (4000 < test[i] <= 5000):
+        elif (3800 < test[i] <= 4200):
             tmp = LIST_COLOR[21]
-        elif (5000 < test[i] <= 6000):
+        elif (4200 < test[i] <= 4600):
             tmp = LIST_COLOR[22]
-        elif (6000 < test[i] < 7000):
+        elif (4600 < test[i] < 5000):
             tmp = LIST_COLOR[23]
-        elif (7000 < test[i]):
+        elif (5000 < test[i] < 5400):
             tmp = LIST_COLOR[24]
+        elif (5400 < test[i] < 5800):
+            tmp = LIST_COLOR[25]
+        elif (5800 < test[i] < 6200):
+            tmp = LIST_COLOR[26]
+        elif (6200 < test[i] < 6600):
+            tmp = LIST_COLOR[27]
+        elif (6600 < test[i] < 7000):
+            tmp = LIST_COLOR[28]
+        elif (7000 < test[i] < 7400):
+            tmp = LIST_COLOR[29]
+        elif (7400 < test[i] < 7800):
+            tmp = LIST_COLOR[30]
         color.append(tmp)
     return color
         
 
 
 if __name__ == "__main__":
-    s = "./dems/N45W001.hgt"
+    s = "./dems/N00E006.hgt"
     b_string1 = s.encode('utf-8')
     test = read_dem(b_string1)
     color = getColor(test)
