@@ -3,20 +3,26 @@ from PIL import Image
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
 
-LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15), (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99), (247, 243, 149), (243, 185, 93), (202, 152, 63), (196, 132, 62), (162, 106, 57), (131, 82, 42), (106, 64, 32), (69, 46, 28), (50, 28, 14), (129, 96, 88), (158, 130, 126), (182, 159, 154), (207, 193, 190), (230, 221, 217), (241, 243, 240), (255, 255, 255)]
+LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
+    (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99),
+    (247, 243, 149), (243, 185, 93), (202, 152, 63), (196, 132, 62),
+    (162, 106, 57), (131, 82, 42), (106, 64, 32), (69, 46, 28), (50, 28, 14),
+    (129, 96, 88), (158, 130, 126), (182, 159, 154), (207, 193, 190),
+    (230, 221, 217), (241, 243, 240), (255, 255, 255)]
 
-def readDem (filename):
+def read_dem (filename):
     test = []
     with open(filename, "rb") as file:
         cpt = 0
         height = []
-        filen = filename[filename.__len__() - 11:filename.__len__() - 4].decode("utf8")
-        lat = filen[1:2]
-        lng = filen[4:7]
-        if (filen[0]=='S' or filen[0]=='s'):
-            lat *= -1
-        if (filen[3]=='W' or filen[3]=='w'):
-            lng *= -1
+        name_size = filename.__len__()
+        filen = filename[name_size - 11:name_size - 4].decode("utf8")
+        # lat = filen[1:2]
+        # lng = filen[4:7]
+        # if (filen[0]=='S' or filen[0]=='s'):
+        #     lat *= -1
+        # if (filen[3]=='W' or filen[3]=='w'):
+        #     lng *= -1
         for i in range(TILE_LENGHT):
             for j in range(TILE_LENGHT):
                 buffer = file.read(2)
@@ -26,7 +32,9 @@ def readDem (filename):
                 height.append((buffer[0] << 8) | buffer[1])
                 test.append(height[cpt])
                 # if height[cpt] == 17:
-                #     print(str(int(lat) + i * 1. / TILE_LENGHT) + "," + str(int(lng) + j * .001 / TILE_LENGHT) + ","  + str(height[cpt]))
+                # latStr = str(int(lat) + i * 1. / TILE_LENGHT)
+                # lngStr = str(int(lng) + j * .001 / TILE_LENGHT)
+                # print(latStr + "," + lngStr + ","  + str(height[cpt]))
                 cpt +=1
         return test
 
@@ -94,7 +102,7 @@ def getColor(array):
 if __name__ == "__main__":
     s = "./dems/N45W001.hgt"
     b_string1 = s.encode('utf-8')
-    test = readDem(b_string1)
+    test = read_dem(b_string1)
     color = getColor(test)
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
     img.putdata(color)
