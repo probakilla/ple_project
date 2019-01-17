@@ -1,6 +1,0 @@
-Pour se connecter à hbase lancer le serveur thrift:
-'''
-hbase thrift start &
-'''
-Puis après on peut lancer testHbase.py
-whouhou
