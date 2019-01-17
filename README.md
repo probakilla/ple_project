@@ -16,9 +16,9 @@ Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_r
 
 Pour se connecter à hbase lancer le serveur thrift:
 
-''' bash
+``` bash
 	hbase thrift start &
-'''
+```
 
 Puis après on peut lancer testHbase.py
 whouhou
