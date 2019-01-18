@@ -18,11 +18,12 @@ Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_r
 Pour se connecter à hbase lancer le serveur thrift:
 
 ```bash
-$ hbase thrift start &
+$ hbase thrift start -p <port> &
 ```
 
-Puis après on peut lancer testHbase.py
-whouhou
+Veuillez choisir un port différent du serveur rest
+Le port est optionnel (par défaut il me semble que c'est 9090) mais ce
+boloss de Julien la mis pour le serveur rest donc cheh
 
 ## Specs HBase
 
