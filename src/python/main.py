@@ -1,4 +1,6 @@
+import math
 from PIL import Image
+import sys
 
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
@@ -39,84 +41,25 @@ def read_dem (filename):
                 cpt +=1
         return test
 
-def getColor(array):
-    color = []
+def get_list_pixel(height_array):
+    list_pixel = []
     ocean_rgb = (16, 118, 217)
-    for i in range(array.__len__()):
-        if (test[i] > HIGHEST_HEIGHT or test[i] == 0):
-            tmp = ocean_rgb
-        elif (0 < test[i] <= 20):
-            tmp = LIST_COLOR[0]
-        elif (20 < test[i] <= 40):
-            tmp = LIST_COLOR[1]
-        elif (40 < test[i] <= 70):
-            tmp = LIST_COLOR[2]
-        elif (70 < test[i] <= 100):
-            tmp = LIST_COLOR[3]
-        elif (100 < test[i] <= 150):
-            tmp = LIST_COLOR[4]
-        elif (150 < test[i] <= 200):
-            tmp = LIST_COLOR[5]
-        elif (200 < test[i] <= 300):
-            tmp = LIST_COLOR[6]
-        elif (300 < test[i] <= 400):
-            tmp = LIST_COLOR[7]
-        elif (400 < test[i] <= 500):
-            tmp = LIST_COLOR[8]
-        elif (500 < test[i] <= 650):
-            tmp = LIST_COLOR[9]
-        elif (650 < test[i] <= 800):
-            tmp = LIST_COLOR[10]
-        elif (800 < test[i] <= 1000):
-            tmp = LIST_COLOR[11]
-        elif (1000 < test[i] <= 1250):
-            tmp = LIST_COLOR[12]
-        elif (1250 < test[i] <= 1500):
-            tmp = LIST_COLOR[13]
-        elif (1500 < test[i] <= 1750):
-            tmp = LIST_COLOR[14]
-        elif (1750 < test[i] <= 2000):
-            tmp = LIST_COLOR[15]
-        elif (2000 < test[i] <= 2300):
-            tmp = LIST_COLOR[16]
-        elif (2300 < test[i] <= 2600):
-            tmp = LIST_COLOR[17]
-        elif (2600 < test[i] <= 3000):
-            tmp = LIST_COLOR[18]
-        elif (3000 < test[i] <= 3400):
-            tmp = LIST_COLOR[19]
-        elif (3400 < test[i] <= 3800):
-            tmp = LIST_COLOR[20]
-        elif (3800 < test[i] <= 4200):
-            tmp = LIST_COLOR[21]
-        elif (4200 < test[i] <= 4600):
-            tmp = LIST_COLOR[22]
-        elif (4600 < test[i] < 5000):
-            tmp = LIST_COLOR[23]
-        elif (5000 < test[i] < 5400):
-            tmp = LIST_COLOR[24]
-        elif (5400 < test[i] < 5800):
-            tmp = LIST_COLOR[25]
-        elif (5800 < test[i] < 6200):
-            tmp = LIST_COLOR[26]
-        elif (6200 < test[i] < 6600):
-            tmp = LIST_COLOR[27]
-        elif (6600 < test[i] < 7000):
-            tmp = LIST_COLOR[28]
-        elif (7000 < test[i] < 7400):
-            tmp = LIST_COLOR[29]
-        elif (7400 < test[i] < 7800):
-            tmp = LIST_COLOR[30]
-        color.append(tmp)
-    return color
-        
+    for i in range(height_array.__len__()):
+        pixel = ocean_rgb
+        if (height_array[i] != 0 and height_array[i] < HIGHEST_HEIGHT):
+            color_index = int(math.sqrt(height_array[i])*(LIST_COLOR.__len__()/math.sqrt(HIGHEST_HEIGHT)))
+            pixel = LIST_COLOR[color_index]
+        if (height_array[i] > HIGHEST_HEIGHT): # Data error
+            pixel = list_pixel[i-1]
+        list_pixel.append(pixel)
+    return list_pixel
 
 
 if __name__ == "__main__":
-    s = "./dems/N00E006.hgt"
+    s = "./dems/" + sys.argv[1] + ".hgt"
     b_string1 = s.encode('utf-8')
-    test = read_dem(b_string1)
-    color = getColor(test)
+    height_list = read_dem(b_string1)
+    color = get_list_pixel(height_list)
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
     img.putdata(color)
-    img.save('image.png') 
+    img.save(sys.argv[1] + '.png')
