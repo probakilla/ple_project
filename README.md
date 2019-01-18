@@ -4,9 +4,10 @@
 
 Pour permettre à HBase de recevoir les requêtes il faut lancer le serveur REST:
 
-``` bash
-	hbase rest start -p <port>
-``` 
+```bash
+$ hbase rest start -p <port>
+```
+
 Le port est optionnel (par défaut il me semble que c'est 8080)
 Après ça HBase peut recevoir des requêtes HTTP classiques (curl, fetch etc...)
 
@@ -16,9 +17,31 @@ Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_r
 
 Pour se connecter à hbase lancer le serveur thrift:
 
-``` bash
-	hbase thrift start &
+```bash
+$ hbase thrift start &
 ```
 
 Puis après on peut lancer testHbase.py
 whouhou
+
+## Specs HBase
+
+Table : pipin
+ColumnFamilies : N, S
+Rows : Code LatLong - XXYYY
+XX = Latitude
+YYY = Longitude
+Families de families : N:E, N:W, S:E, S:W
+
+### Examples
+
+> GET
+>
+> ```bash
+> $ get "pipin", "XXYYY", "N:E"
+> ```
+> PUT
+>
+> ```bash
+> $ put "pipin", "XXYYY", "N:E", "value"
+> ```
