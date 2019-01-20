@@ -1,10 +1,12 @@
 import math
+import pydoop.hdfs as hdfs
 import numpy as np
 from PIL import Image
 import sys
 
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
+DEM_PATH = "/user/raw_data/dem3/" 
 
 LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
     (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99),
@@ -16,7 +18,7 @@ LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
 
 def read_dem (filename):
     test = []
-    with open(filename, "rb") as file:
+    with hdfs.open(DEM_PATH + filename, "r") as file:
         cpt = 0
         height = []
         name_size = filename.__len__()
@@ -33,7 +35,7 @@ def read_dem (filename):
                 if(not buffer):
                     print ("Error reading file!")
                     return -1
-                height.append((buffer[0] << 8) | buffer[1])
+                height.append((ord(buffer[0]) << 8) | ord(buffer[1]))
                 test.append(height[cpt])
                 # if height[cpt] == 17:
                 # latStr = str(int(lat) + i * 1. / TILE_LENGHT)
@@ -56,16 +58,12 @@ def get_list_pixel(height_array):
     return list_pixel
 
 def aggregate_dem(nw_image, ne_image, se_image, sw_image):
-    nw_image = nw_image.resize((nw_image.size[0] // 4, nw_image.size[1] // 4))
-    ne_image = ne_image.resize((ne_image.size[0] // 4, ne_image.size[1] // 4))
-    se_image = se_image.resize((se_image.size[0] // 4, se_image.size[1] // 4))
-    sw_image = sw_image.resize((sw_image.size[0] // 4, sw_image.size[1] // 4))
-    list_image = [nw_image, ne_image, se_image, sw_image]
     north_imgs_comb = np.hstack( (np.asarray( nw_image ), np.asarray( ne_image) ) )
     south_imgs_comb = np.hstack( (np.asarray( sw_image ), np.asarray( se_image) ) )
     imgs_comb = np.vstack( (north_imgs_comb, south_imgs_comb ) )
     imgs_comb = Image.fromarray( imgs_comb)
-    imgs_comb.show()
+    imgs_comb = imgs_comb.resize((TILE_LENGHT, TILE_LENGHT))
+    return imgs_comb
 
 def image_from_dem (s):
     b_string1 = s.encode('utf-8')
@@ -75,14 +73,18 @@ def image_from_dem (s):
     img.putdata(color)
     return img
 if __name__ == "__main__":
-    nw_dem = "./dems/" + sys.argv[1] + ".hgt"
-    ne_dem = "./dems/" + sys.argv[2] + ".hgt"
-    se_dem = "./dems/" + sys.argv[3] + ".hgt"
-    sw_dem = "./dems/" + sys.argv[4] + ".hgt"
+    nw_dem = sys.argv[1] + ".hgt"
+    ne_dem = sys.argv[2] + ".hgt"
+    se_dem = sys.argv[3] + ".hgt"
+    sw_dem = sys.argv[4] + ".hgt"
     nw_img = image_from_dem(nw_dem)
     ne_img = image_from_dem(ne_dem)
-    se_img = image_from_dem(se_dem)
     sw_img = image_from_dem(sw_dem)
+    se_img = image_from_dem(se_dem)
+ #   nw_img = Image.open(sys.argv[1])
+ #   ne_img = Image.open(sys.argv[2])
+  #  se_img = Image.open(sys.argv[3])
+   # sw_img = Image.open(sys.argv[4])
     img = aggregate_dem(nw_img, ne_img, se_img, sw_img)
     img.show()
-    #img.save(sys.argv[1] + '.png')
+    img.save(sys.argv[1] + '_agregate.png')
