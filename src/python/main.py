@@ -1,8 +1,10 @@
-import math
-import pydoop.hdfs as hdfs
-import numpy as np
-from PIL import Image
 import sys
+import math
+import numpy as np
+import pydoop.hdfs as hdfs
+from PIL import Image
+from pyspark import SparkContext
+
 
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
@@ -74,6 +76,16 @@ def image_from_dem (s):
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
     img.putdata(color)
     return img
+
+def spark ():
+    context = SparkContext("yarn", "python_spark", pyFiles=[__file__])
+    num_executor = int(context.getConf().get('spark.executor.instances'))
+    rdd = context.textFile("hdfs:///user/raw_data/worldcitiespop.original",
+                            minPartitions=num_executor)
+    print("Number d'executeur", num_executor)
+    print("Nombre de partition sur le rdd", rdd.getNumPartitions())
+
+
 if __name__ == "__main__":
     nw_dem = sys.argv[1] + ".hgt"
     ne_dem = sys.argv[2] + ".hgt"
