@@ -17,12 +17,12 @@ LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
     (195, 177, 167), (216, 206, 199), (230, 224, 220), (255, 255, 255)]
 
 def read_dem (filename):
-    test = []
+    list_height = []
     with hdfs.open(DEM_PATH + filename, "r") as file:
         cpt = 0
         height = []
         name_size = filename.__len__()
-        filen = filename[name_size - 11:name_size - 4].decode("utf8")
+        # filen = filename[name_size - 11:name_size - 4].decode("utf8")
         # lat = filen[1:2]
         # lng = filen[4:7]
         # if (filen[0]=='S' or filen[0]=='s'):
@@ -36,13 +36,13 @@ def read_dem (filename):
                     print ("Error reading file!")
                     return -1
                 height.append((ord(buffer[0]) << 8) | ord(buffer[1]))
-                test.append(height[cpt])
+                list_height.append(height[cpt])
                 # if height[cpt] == 17:
                 # latStr = str(int(lat) + i * 1. / TILE_LENGHT)
                 # lngStr = str(int(lng) + j * .001 / TILE_LENGHT)
                 # print(latStr + "," + lngStr + ","  + str(height[cpt]))
                 cpt +=1
-        return test
+        return list_height
 
 def get_list_pixel(height_array):
     list_pixel = []
@@ -68,6 +68,8 @@ def aggregate_dem(nw_image, ne_image, se_image, sw_image):
 def image_from_dem (s):
     b_string1 = s.encode('utf-8')
     height_list = read_dem(b_string1)
+    if (height_list == -1):
+        sys.exit(1)
     color = get_list_pixel(height_list)
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
     img.putdata(color)
@@ -81,10 +83,10 @@ if __name__ == "__main__":
     ne_img = image_from_dem(ne_dem)
     sw_img = image_from_dem(sw_dem)
     se_img = image_from_dem(se_dem)
- #   nw_img = Image.open(sys.argv[1])
- #   ne_img = Image.open(sys.argv[2])
-  #  se_img = Image.open(sys.argv[3])
-   # sw_img = Image.open(sys.argv[4])
+    # nw_img = Image.open(sys.argv[1])
+    # ne_img = Image.open(sys.argv[2])
+    # se_img = Image.open(sys.argv[3])
+    # sw_img = Image.open(sys.argv[4])
     img = aggregate_dem(nw_img, ne_img, se_img, sw_img)
     img.show()
     img.save(sys.argv[1] + '_agregate.png')
