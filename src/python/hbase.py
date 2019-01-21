@@ -6,12 +6,12 @@ PIPIN = happybase.Connection('young', 8070).table("pipin")
 LAT_LENGHT = 2
 LNG_LENGHT = 3
 
-def store_dem(filename):
-    im = Image.open(filename)
+def store_dem_img(img, filename):
+    #im = Image.open(filename)
     lat_lng = filename[1:3] + filename[4:7]
     cf = filename[0] + ":" + filename[3]
     out = io.BytesIO()
-    im.save(out, format='png')
+    img.save(out, format='png')
     PIPIN.put(lat_lng, {cf : out.getvalue()})
 
 
@@ -34,8 +34,8 @@ def retrieve_dem(lat, lng):
 
 
 if __name__ == "__main__":
-    pass
-    #store_dem("N45W001.png")
-    #image = retrieve_dem(45, -1)
+
+    #store_dem(img, "N45W001.png")
+    image = retrieve_dem(69, -69)
     #image.save("N45W001.png")
-    #image.show()
+    image.show()

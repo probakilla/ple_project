@@ -3,12 +3,16 @@ import math
 import numpy as np
 import pydoop.hdfs as hdfs
 from PIL import Image
+from hbase import store_dem_img
 from pyspark import SparkContext
 
 
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
-DEM_PATH = "/user/raw_data/dem3/" 
+DEM_PATH = "/user/raw_data/dem3/"
+CLUSTER = "yarn"
+APP_NAME = "Demification"
+
 
 LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
     (55, 169, 1), (88, 176, 9), (114, 192, 26), (164, 228, 86), (198, 239, 99),
@@ -20,7 +24,7 @@ LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
 
 def read_dem (filename):
     list_height = []
-    with hdfs.open(DEM_PATH + filename, "r") as file:
+    with hdfs.open(DEM_PATH + filename.decode(), "r") as file:
         cpt = 0
         height = []
         name_size = filename.__len__()
@@ -78,27 +82,31 @@ def image_from_dem (s):
     return img
 
 def spark ():
-    context = SparkContext("yarn", "python_spark", pyFiles=[__file__])
+    context = SparkContext(CLUSTER, APP_NAME, pyFiles=[__file__])
     num_executor = int(context.getConf().get('spark.executor.instances'))
     rdd = context.textFile("hdfs:///user/raw_data/worldcitiespop.original",
                             minPartitions=num_executor)
+    img = image_from_dem("N69W069.hgt")
+    store_dem_img(img, "N69W069.hgt")
     print("Number d'executeur", num_executor)
     print("Nombre de partition sur le rdd", rdd.getNumPartitions())
 
 
 if __name__ == "__main__":
-    nw_dem = sys.argv[1] + ".hgt"
-    ne_dem = sys.argv[2] + ".hgt"
-    se_dem = sys.argv[3] + ".hgt"
-    sw_dem = sys.argv[4] + ".hgt"
-    nw_img = image_from_dem(nw_dem)
-    ne_img = image_from_dem(ne_dem)
-    sw_img = image_from_dem(sw_dem)
-    se_img = image_from_dem(se_dem)
+    spark()
+    #nw_dem = sys.argv[1] + ".hgt"
+#    ne_dem = sys.argv[2] + ".hgt"
+#    se_dem = sys.argv[3] + ".hgt"
+#    sw_dem = sys.argv[4] + ".hgt"
+    #img = image_from_dem(nw_dem)
+#    ne_img = image_from_dem(ne_dem)
+#    sw_img = image_from_dem(sw_dem)
+#    se_img = image_from_dem(se_dem)
     # nw_img = Image.open(sys.argv[1])
     # ne_img = Image.open(sys.argv[2])
     # se_img = Image.open(sys.argv[3])
     # sw_img = Image.open(sys.argv[4])
-    img = aggregate_dem(nw_img, ne_img, se_img, sw_img)
-    img.show()
-    img.save(sys.argv[1] + '_agregate.png')
+    #img = aggregate_dem(nw_img, ne_img, se_img, sw_img)
+    #store_dem(img, sys.argv[1])
+    #img.show()
+    #img.save(sys.argv[1] + '.png')
