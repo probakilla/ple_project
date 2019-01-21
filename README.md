@@ -20,7 +20,7 @@ Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_r
 l'API dispose de deux options :
 - `-h` ou `--hbase` qui permet de spécifier le port utilisé pour les requêtes sur l'API REST de HBase,
 valeur par défaut : 8080
-- `-p` ou `--port` qui permet de spécifier le port utilisé pour l'API en question, valeur par défaut : 
+- `-p` ou `--port` qui permet de spécifier le port utilisé pour l'API en question, valeur par défaut :
 4040
 
 ### Routes
@@ -65,3 +65,8 @@ Families de families : N:E, N:W, S:E, S:W
 > ```bash
 > $ put "pipin", "XXYYY", "N:E", "value"
 > ```
+
+Lancer spark:
+spark-submit --num-executors 4 --master yarn --deploy-mode client src/python/spark.py 2> /dev/null
+
+Hdfs comporte 19910 fichiers hgt
