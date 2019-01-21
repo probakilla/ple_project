@@ -22,7 +22,6 @@ class HBaseRequests {
 	}).catch(err => {
 	    console.error(err.message);
 	})
-	console.log(JSON.stringify(ret));
 	return ret;
     }
 }

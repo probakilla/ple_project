@@ -13,6 +13,25 @@ Après ça HBase peut recevoir des requêtes HTTP classiques (curl, fetch etc...
 
 Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_rest)
 
+## API interne
+
+### Options
+
+l'API dispose de deux options :
+- `-h` ou `--hbase` qui permet de spécifier le port utilisé pour les requêtes sur l'API REST de HBase,
+valeur par défaut : 8080
+- `-p` ou `--port` qui permet de spécifier le port utilisé pour l'API en question, valeur par défaut : 
+4040
+
+### Routes
+
+> GET `/img/:row&col`
+> Permet de récupérer dans HBase une image dans la ligne "row" et dans la colonne "col"
+> Exemple :
+> ``` bash
+> $ curl "http://localhost:4040/img/69069&N:W"
+> ```
+
 ## Connexion à HBase avec python
 
 Pour se connecter à hbase lancer le serveur thrift:
