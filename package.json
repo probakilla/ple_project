@@ -2,7 +2,6 @@
   "name": "PLZ",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "pm2 start src/js/app.js -f",
     "stop": "pm2 stop app"
@@ -20,6 +19,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "node-fetch": "^2.3.0",
+    "node-getopt": "^0.3.2",
     "pm2": "^3.2.4"
   }
 }
