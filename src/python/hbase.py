@@ -28,10 +28,12 @@ def retrieve_dem(lat, lng):
     str_lat = str(lat).zfill(LAT_LENGHT)
     str_lng = str(lng).zfill(LNG_LENGHT)
     lat_lng = str_lat + str_lng
-    row = PIPIN.row(lat_lng, columns=[cf])
+    return get_image(lat_lng, cf)
+
+def get_image(row, cf):
+    row = PIPIN.row(row, columns=[cf])
     image = Image.open(io.BytesIO(row[str.encode(cf)]))
     return image
-
 
 if __name__ == "__main__":
 
