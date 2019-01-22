@@ -66,7 +66,11 @@ Families de families : N:E, N:W, S:E, S:W
 > $ put "pipin", "XXYYY", "N:E", "value"
 > ```
 
-Lancer spark:
-spark-submit --num-executors 4 --master yarn --deploy-mode client src/python/spark.py 2> /dev/null
+## Spark
+
+>Lancer spark:
+> ```bash
+>spark-submit --num-executors <nb> --master yarn --deploy-mode client src/python/spark.py 2> /dev/null
+>```
 
 Hdfs comporte 19910 fichiers hgt
