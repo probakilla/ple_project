@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const asyncHandler = require('./asyncHandler');
 
 function checkPort(port, portName) {
@@ -27,6 +28,8 @@ if (opt.options.hbase !== undefined) {
 
 const HBase = require('./hbaseConnection');
 const hbase = new HBase(hbasePort);
+
+app.use(cors());
 
 app.get('/img/:row&:col', asyncHandler(async (req, res, next) => {
     const row = req.params.row;
