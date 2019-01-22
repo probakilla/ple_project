@@ -1,5 +1,6 @@
 from pyspark import SparkContext
 from demification import image_from_dem
+from hbase import store_dem_img
 
 CLUSTER = "yarn"
 APP_NAME = "Demification"
@@ -10,6 +11,7 @@ def maps (value):
     dem_path = value[0]
     if dem_path == "hdfs://ripoux:9000/user/raw_data/dem3/N00E006.hgt":
         img = image_from_dem(value[1])
+        store_dem_img(img, "N00E006", 9)
         return ("test", img)
 
 
