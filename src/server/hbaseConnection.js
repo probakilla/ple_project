@@ -6,12 +6,12 @@ const SCHEMA = '/schema';
 const TABLE = 'pipin'
 
 class HBaseRequests {
-    constructor(port) {
-	this.port = port;
+    constructor(postName, port) {
+	this.url = 'http://' + postName + ':' + port;
     }
 
     async getImage(row, column) {
-	let url = BASE_URL + this.port + '/' + TABLE + '/' + row + '/' + column;
+	let url = this.url + '/' + TABLE + '/' + row + '/' + column;
 	let ret = await fetch(url, {
 	    method: 'GET',
 	    headers: HEADERS
