@@ -4,37 +4,12 @@ const app = express();
 const cors = require('cors');
 const asyncHandler = require('./asyncHandler');
 
-function checkPort(port, portName) {
-    if (isNaN(port) || port < 1024 || port > 65536) {
-	throw new Error('ERROR ! Invalid' + portName +
-		' option value : must be a number between 1024 and 65536');
-    }
-}
-
 let hbasePort = process.env.REST_PORT || '8080';
 let apiPort = process.env.API_PORT || '4040';
 let postName = process.env.POST_NAME || null;
 
-opt = require('node-getopt').create([
-    ['p', 'port=ARG', 'Port for the API'],
-    ['h', 'hbase=ARG', 'Port for the hbase rest API'],
-    ['n', 'postName=ARG', 'Name of the post where the API rest is started']
-]).bindHelp().parseSystem();
-
-if (opt.options.postName !== undefined) {
-    postName = opt.options.postName;
-}
-if (opt.options.port !== undefined) {
-    checkPort(opt.options.port);
-    apiPort = opt.options.port;
-}
-if (opt.options.hbase !== undefined) {
-    checkPort(opt.options.hbase);
-    hbasePort = opt.options.hbase;
-}
-
 if (postName === null) {
-    throw new Error('Please enter a post name : option -n or --postName');
+    throw new Error('Please configure the correct .env file');
 }
 
 const HBase = require('./hbaseConnection');
