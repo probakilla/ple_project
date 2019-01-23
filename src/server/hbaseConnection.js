@@ -1,9 +1,7 @@
+require('dotenv').config();
 const fetch = require('node-fetch');
-
 const HEADERS = {'Accept': 'application/json'};
-const BASE_URL = 'http://young:';
-const SCHEMA = '/schema';
-const TABLE = 'pipin'
+const TABLE = process.env.HBASE_TABLE;
 
 class HBaseRequests {
     constructor(postName, port) {

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -10,9 +11,9 @@ function checkPort(port, portName) {
     }
 }
 
-let hbasePort = '8080';
-let apiPort = '4040';
-let postName = null;
+let hbasePort = process.env.REST_PORT || '8080';
+let apiPort = process.env.API_PORT || '4040';
+let postName = process.env.POST_NAME || null;
 
 opt = require('node-getopt').create([
     ['p', 'port=ARG', 'Port for the API'],

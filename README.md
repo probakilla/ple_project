@@ -15,13 +15,20 @@ Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_r
 
 ## API interne
 
-### Options
+### Environnement
 
-l'API dispose de deux options :
-- `-h` ou `--hbase` qui permet de spécifier le port utilisé pour les requêtes sur l'API REST de HBase,
-valeur par défaut : 8080
-- `-p` ou `--port` qui permet de spécifier le port utilisé pour l'API en question, valeur par défaut :
-4040
+Pour configurer l'api interne ainsi que le front, un fichier .env doit contenir les informations suivantes :
+- Port que l'api utilisera pour recevoir des requêtes.
+- Port que l'api utilisera pour envoyer des requêtes.
+- Nom du post (Cremi) à qui envoyer des requêtes.
+- Nom de la table à utiliser pour la base de données HBase.
+> Exemple :
+>```bash
+>POST_NAME=batman
+>API_PORT=4040
+>REST_PORT=8080
+>HBASE_TABLE=pipin
+>```
 
 ### Routes
 
