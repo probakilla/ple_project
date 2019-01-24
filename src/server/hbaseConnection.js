@@ -5,7 +5,7 @@ const TABLE = process.env.HBASE_TABLE;
 
 class HBaseRequests {
     constructor(postName, port) {
-	this.url = 'http://' + postName + ':' + port;
+	this.url = 'http://localhost:' + port;
     }
 
     async getImage(row, column) {

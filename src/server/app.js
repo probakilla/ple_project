@@ -30,4 +30,3 @@ app.listen(apiPort, () => {
 		'HBase requests on port : ' + hbasePort + '\n' +
 	        'Post name set to : ' + postName);
 });
-
