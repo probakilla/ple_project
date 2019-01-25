@@ -2,10 +2,10 @@ require("dotenv").config();
 const fetch = require("node-fetch");
 const HEADERS = { Accept: "application/json" };
 const TABLE = process.env.HBASE_TABLE;
-const PNG_METADATA = "data:image/png;base64,";
+const METADATA = "";
 
 class HBaseRequests {
-  constructor(postName, port) {
+  constructor(port) {
     this.url = "http://localhost:" + port;
   }
 
@@ -19,10 +19,22 @@ class HBaseRequests {
         return data.json();
       })
       .then(res => {
-        return PNG_METADATA + res.Row[0].Cell[0].$;
+        return METADATA + res.Row[0].Cell[0].$;
       })
-      .catch(err => {
-        console.error(err.message);
+      .catch(async err => {
+        return await fetch(this.url + "/" + TABLE + "/default/zoom:0", {
+          method: "GET",
+          headers: HEADERS
+        })
+          .then(data => {
+            return data.json();
+          })
+          .then(res => {
+            return METADATA + res.Row[0].Cell[0].$;
+          })
+          .catch(err => {
+            console.error(err.message);
+          });
       });
   }
 }
