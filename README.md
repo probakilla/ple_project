@@ -77,7 +77,19 @@ Families de families : N:E, N:W, S:E, S:W
 
 >Lancer spark:
 > ```bash
->spark-submit --num-executors <nb> --master yarn --deploy-mode client src/python/spark.py 2> /dev/null
+>PYSPARK_PYTHON=./python/bin/python spark-submit --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./python/bin/python --master yarn --deploy-mode cluster --archives environment.tar.gz#python --num-executors 25 --py-files src/python/demification.py,src/python/hbase_dem.py src/python/spark.py 2> /dev/null/
 >```
 
 Hdfs comporte 19910 fichiers hgt
+
+
+PYSPARK_PYTHON=./python/bin/python \
+spark-submit \
+--conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./python/bin/python \
+--master yarn \
+--deploy-mode cluster \
+--archives environment.tar.gz#python \
+--py-files src/python/dependence.zip \
+src/python/spark.py
+
+
