@@ -1,4 +1,3 @@
-import sys
 import math
 import numpy as np
 from PIL import Image
@@ -6,9 +5,6 @@ from io import BytesIO
 
 HIGHEST_HEIGHT = 9000
 TILE_LENGHT = 1201
-DEM_PATH = "/user/raw_data/dem3/"
-CLUSTER = "yarn"
-APP_NAME = "Demification"
 
 
 LIST_COLOR = [(26, 87, 15), (21, 109, 4), (26, 130, 11), (35, 154, 15),
@@ -65,4 +61,3 @@ def image_from_dem (s):
     img = Image.new('RGB', (TILE_LENGHT, TILE_LENGHT))
     img.putdata(color)
     return img
-
