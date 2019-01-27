@@ -41,7 +41,10 @@ def get_list_pixel(height_array):
             color_index = int(math.sqrt(height_array[i])*(LIST_COLOR.__len__()/math.sqrt(HIGHEST_HEIGHT)))
             pixel = LIST_COLOR[color_index]
         if (height_array[i] > HIGHEST_HEIGHT): # Data error
-            pixel = list_pixel[i-1]
+            if i == 0:
+                pixel = ocean_rgb
+            else:
+                pixel = list_pixel[i-1]
         list_pixel.append(pixel)
     return list_pixel
 
