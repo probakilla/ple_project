@@ -1,5 +1,6 @@
 import io
 import sys
+import base64
 import happybase
 from PIL import Image
 
@@ -10,21 +11,16 @@ LNG_LENGHT = 3
 
 def store_dem_img(img, filename, zoom_level):
     cf = "zoom:" + zoom_level
-    row_key = filename[1:3] + filename[4:7]
+    row_key = filename.upper()
     out = io.BytesIO()
-    img.save(out, format='jpeg')
-    PIPIN.put(row_key, {cf : out.getvalue()})
+    img.save(out, format='JPEG')
+    img_str = base64.b64encode(out.getvalue())
+    print(img_str)
+    PIPIN.put(row_key, {cf : img_str})
 
-def retrieve_dem(lat, lng, zoom_level):
-    if lat < 0:
-        lat *= -1
-    if lng < 0:
-        lng *= -1
+def retrieve_dem(row_key, zoom_level):
     cf = "zoom:" + zoom_level
-    str_lat = str(lat).zfill(LAT_LENGHT)
-    str_lng = str(lng).zfill(LNG_LENGHT)
-    lat_lng = str_lat + str_lng
-    return get_image(lat_lng, cf)
+    return get_image(row_key, cf)
 
 def get_image(row, cf):
     row = PIPIN.row(row, columns=[cf])
