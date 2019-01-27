@@ -4,14 +4,12 @@ function devenirRiche() {
 
 function zidaneMode() {
   document.body.style.backgroundImage = "url('../../images/zidane_1.jpg')";
-  let zidane_tile = L.tileLayer("../../zidane.jpg", {
-    maxZoom: 18,
-    attribution:
-      'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: "mapbox.streets"
-  });
+  const jumbo = document.getElementById("jumbo")
+  jumbo.style.backgroundImage = "url('../../images/zidane.jpg')";
+  const footer = document.getElementById("footer")
+  footer.style.backgroundImage = "url('../../images/zidane_2.jpeg')"
+  const card = document.getElementById("card")
+  card.style.backgroundImage = "url('../../images/zidane_3.jpeg')"
 }
 
 class Display {
@@ -29,4 +27,4 @@ class Display {
   }
 }
 
-export default Display;
+module.exports = new Display;

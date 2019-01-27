@@ -1,40 +1,41 @@
 {
-  "name": "PLZ",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "npm run front",
-    "stop": "pm2 stop app",
-    "hbase": "./hbase.sh",
-    "server": "pm2 start src/server/app.js --watch",
-    "front": "webpack-dev-server --open --mode development"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/probakilla/ple_project.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/probakilla/ple_project/issues"
-  },
-  "homepage": "https://github.com/probakilla/ple_project#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "css-loader": "^2.1.0",
-    "dotenv": "^6.2.0",
-    "dotenv-webpack": "^1.7.0",
-    "express": "^4.16.4",
-    "fs": "0.0.1-security",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "leaflet": "^1.4.0",
-    "leaflet-map": "^0.2.1",
-    "node-fetch": "^2.3.0",
-    "pm2": "^3.2.9",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.29.0",
-    "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
-  }
+			"name": "PLZ",
+			"version": "1.0.0",
+			"description": "",
+			"scripts": {
+						"start": "npm run front",
+						"stop": "pm2 stop app",
+						"hbase": "./hbase.sh",
+						"server": "pm2 start src/server/app.js --watch",
+						"front": "webpack-dev-server --open --mode development",
+						"test": "jest"
+			},
+			"repository": {
+						"type": "git",
+						"url": "git+ssh://git@github.com/probakilla/ple_project.git"
+			},
+			"author": "",
+			"license": "ISC",
+			"bugs": {
+						"url": "https://github.com/probakilla/ple_project/issues"
+			},
+			"homepage": "https://github.com/probakilla/ple_project#readme",
+			"dependencies": {
+						"cors": "^2.8.5",
+						"css-loader": "^2.1.0",
+						"dotenv": "^6.2.0",
+						"dotenv-webpack": "^1.7.0",
+						"express": "^4.16.4",
+						"hbase": "^0.4.2",
+						"html-loader": "^0.5.5",
+						"html-webpack-plugin": "^3.2.0",
+						"jest": "^24.0.0",
+						"leaflet": "^1.4.0",
+						"node-fetch": "^2.3.0",
+						"pm2": "^3.2.9",
+						"style-loader": "^0.23.1",
+						"webpack": "^4.29.0",
+						"webpack-cli": "^3.2.1",
+						"webpack-dev-server": "^3.1.14"
+			}
 }

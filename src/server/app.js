@@ -1,80 +1,80 @@
 require("dotenv").config();
 const express = require("express");
-const fs = require("fs");
-const app = express();
 const cors = require("cors");
-const asyncHandler = require("./asyncHandler");
-const FILE_NAME = "images/img.jpeg";
-const FILE_PATH = __dirname + "../../../";
+const app = express();
+const coordConv = require("./coordinatesConverter");
 
 let hbasePort = process.env.REST_PORT || "8080";
 let apiPort = process.env.API_PORT || "4040";
 let postName = process.env.POST_NAME || null;
 
-if (postName === null) {
-  throw new Error("Please configure the correct .env file");
+const DEFAULT_ROW = "default";
+const DEFAULT_COL = "zoom:1";
+
+let DEFAULT_TILE = "not founod";
+
+function getDefaultTile() {
+    hbase()
+	.table(process.env.HBASE_TABLE)
+	.row(DEFAULT_ROW)
+	.get(DEFAULT_COL, (error, value) => {
+	    try {
+		let data = value[0].$;
+		DEFAULT_TILE = Buffer.from(data, "base64");
+	    } catch (error) {
+	    }
+	})
 }
 
-const HBase = require("./hbaseConnection");
-const hbase = new HBase(hbasePort);
-
-const options = {
-  root: FILE_PATH,
-  headers: {
-    "x-timestamp": Date.now(),
-    "x-send": true
-  }
+const config = {
+  host: process.env.POST_NAME,
+  port: process.env.REST_PORT
 };
+
+const hbase = require("hbase");
 
 app.use(cors());
 
-app.get(
-  "/img/:row/:col",
-  asyncHandler(async (req, res, next) => {
-    if (req.params.row && req.params.col) {
-      const row = req.params.row;
-      const col = req.params.col;
-      let data = await hbase.getImage(row, col);
-      fs.writeFile(FILE_NAME, data, "base64", writeError => {
-        if (writeError) throw writeError;
-        console.info("file has been saved");
-        res.sendFile(FILE_NAME, options, sendError => {
-          if (sendError) {
-            next(sendError);
-          } else {
-            console.info("Img sent: ", FILE_NAME);
-          }
-        });
-        res.on("finish", () => {
-          if (!fs.existsSync(FILE_NAME)) {
-            console.error(FILE_NAME, " does not exists");
-          } else {
-            setTimeout(() => {
-              try {
-                fs.unlinkSync(FILE_NAME);
-                console.info(FILE_NAME, " was deleted");
-              } catch (error) {
-                console.error("Error removing ", FILE_NAME);
-              }
-            }, 000);
-          }
-        });
-      });
+app.get("/img/:lat/:lng/:zoom", (req, res) => {
+    if (req.params.lat && req.params.lng && req.params.zoom) {
+	let coords = coordConv.toFileName(req.params.lat, req.params.lng);
+	let zoom = "zoom:" + req.params.zoom;
+	res.set("Content-Type", "image/png");
+	hbase()
+	    .table(process.env.HBASE_TABLE)
+	    .row(coords)
+	    .get(zoom, (error, value) => {
+		if (error) {
+		    try {
+			let img = DEFAULT_TILE;
+			res.send(img);
+		    } catch {}
+		} else {
+		    try {
+			let img = value[0].$;
+			if (error) console.error(error);
+			let data = Buffer.from(img, "base64");
+			res.send(data);
+		    } catch (err) {
+			//console.error(err);
+		    }
+		}
+	    })
     }
-  })
-);
+})
 
 app.listen(apiPort, () => {
-  console.log(
-    "====== API LINSTENING ======" +
-      "\n" +
-      "API listening on port : " +
-      apiPort +
-      "\n" +
-      "HBase requests on port : " +
-      hbasePort +
-      "\n" +
-      "Post name set to : " +
-      postName
-  );
+    getDefaultTile();
+    console.log(
+	"====== API LINSTENING ======" +
+	    "\n" +
+	    "API listening on port : " +
+	    apiPort +
+	    "\n" +
+	    "HBase requests on port : " +
+	    hbasePort +
+	    "\n" +
+	    "Post name set to : " +
+	    postName
+    );
 });
