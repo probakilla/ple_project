@@ -27,4 +27,4 @@ class Display {
   }
 }
 
-module.exports = new Display;
+module.exports = new Display();

@@ -29,18 +29,30 @@
       <h1> Pourquoi utiliser Google Maps quand on peut avoir mieux ici ?</h1>
       <hr>
       <div class="container bot-spacing">
-	 <div class="row">
-	    <div class="col-12">
-	       <h4 id="uri-disp"></h4>
-	    </div>
-	 </div>
+	      <div class="row">
+	        <div class="col-12">
+	          <h4 id="uri-disp"></h4>
+	        </div>
+	      </div>
       </div>
     </div>
     
     <div class="container">
       <div class="row">
-	 <div class="col-12 text-center">
-	   <div id="map">
+	      <div class="col-12 text-center">
+	        <div id="map">
+              <script>
+              const API_URL = "http://ripoux:9696/img/{y}/{x}/{z}/";
+              let mymap = L.map("map").setView([51.505, -0.09], 9);
+              L.tileLayer(API_URL, {
+              maxZoom: 9,
+              attribution:
+                'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+              id: "mapbox.streets"
+              }).addTo(mymap);
+            </script>
           </div>
         </div>
       </div>
@@ -48,20 +60,20 @@
 
     <div class="container bot-margin">
       <div id="card" class="card bg-warning">
-	 <div class="card-body">
-	    <div class="row">
-	      <div class="col-8">
-	        <h3>Grâce à ma méthode, découvrez comment gagner 100000€ par heure
+	      <div class="card-body">
+	        <div class="row">
+	          <div class="col-8">
+	            <h3>Grâce à ma méthode, découvrez comment gagner 100000€ par heure
 		              juste en entrant votre code de carte bleue ici :
-	        </h3>
-	      </div>
-	      <div class="col-4">
-	        <h2>Votre code : </h2>
-	        <button id="btn" class="btn btn-danger">Devenir riche !</button>
-	        <input type="text"><br>
-	      </div>
+	            </h3>
+	          </div>
+	          <div class="col-4">
+	            <h2>Votre code : </h2>
+	            <button id="btn" class="btn btn-danger">Devenir riche !</button>
+	            <input type="text"><br>
+	          </div>
           </div>
-	 </div>
+	      </div>
       </div>
     </div>
 
