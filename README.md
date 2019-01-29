@@ -39,47 +39,36 @@ Pour configurer l'api interne ainsi que le front, un fichier .env doit contenir 
 > $ curl "http://localhost:4040/img/69069&N:W"
 > ```
 
-## Connexion à HBase avec python
-
-Pour se connecter à hbase lancer le serveur thrift:
-
-```bash
-$ hbase thrift start -p <port> &
-```
-
-Veuillez choisir un port différent du serveur rest
-Le port est optionnel (par défaut il me semble que c'est 9090) mais ce
-boloss de Julien la mis pour le serveur rest donc cheh
-
 ## Specs HBase
 
 Table : pipin
-ColumnFamilies : N, S
-Rows : Code LatLong - XXYYY
+ColumnFamilies : zoom
+Rows : Code LatLong - XX-YYY
 XX = Latitude
 YYY = Longitude
-Families de families : N:E, N:W, S:E, S:W
+Families de families : zoom:0, zoom:1, zoom:2, zoom:3, ... , zoom:9
 
 ### Examples
 
 > GET
 >
 > ```bash
-> $ get "pipin", "XXYYY", "N:E"
+> $ get "pipin", "XXYYY", "zoom:0"
 > ```
 > PUT
 >
 > ```bash
-> $ put "pipin", "XXYYY", "N:E", "value"
+> $ put "pipin", "XXYYY", "zoom:9", "value"
 > ```
 
 ## Spark
 
 >Lancer spark:
 > ```bash
->PYSPARK_PYTHON=./python/bin/python spark-submit --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./python/bin/python --master yarn --deploy-mode cluster --archives environment.tar.gz#python --driver-memory 4g --executor-memory 2g --executor-cores 2 --num-executors 25 --py-files src/python/demification.py,src/python/hbase_dem.py src/python/spark.py 2> /dev/null
+> spark-submit --driver-memory 1g --executor-memory 1g --executor-cores 2 --num-executors 25  --class 'bigdata.Smark' --master yarn --deploy-mode cluster Smark-1.0.0.jar
 >```
 
 Hdfs comporte 19910 fichiers hgt
+
 
 
