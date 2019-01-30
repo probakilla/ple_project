@@ -103,10 +103,8 @@ public class Smark {
 		SparkConf conf = new SparkConf().setAppName("SparkVa").setMaster("yarn");
 		//conf.set("spark.hbase.host", "young");
 		JavaSparkContext context = new JavaSparkContext(conf);
-		/*Connection con = Hbase.HBaseProg.setup();
 		Hbase.HBaseProg.getZidane();
-		con.close();*/
-		JavaPairRDD<String, PortableDataStream> rdd = context.binaryFiles("../raw_data/dem3/");
+		/*JavaPairRDD<String, PortableDataStream> rdd = context.binaryFiles("../raw_data/dem3/");
 		JavaRDD<Tuple2<String, String>> res = rdd.map(tuple -> {
 			String pathFile = tuple._1;
 			int pathLen = pathFile.length();
@@ -118,11 +116,10 @@ public class Smark {
 			}
 			String row = Hbase.HBaseProg.putDemImg(img, nameFile, "9");
 			Tuple2<String, String> keyValue = new Tuple2<String, String>(nameFile, row);
-			//Hbase.HBaseProg.closeCon();
 			return keyValue;
 			
 		}).filter(x -> x != null);
-		res.count();
+		res.count();*/
 		context.close(); 
 	}
 }

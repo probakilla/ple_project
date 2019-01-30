@@ -88,7 +88,7 @@ public class Hbase {
 				System.out.println("Récupération échoué");
 			}
 			byte[] testByte = Base64.decode(Bytes.toString((imgByte)));
-			ByteArrayInputStream bis = new ByteArrayInputStream(imgByte);
+			ByteArrayInputStream bis = new ByteArrayInputStream(testByte);
 			image = ImageIO.read(bis);
 			bis.close();
 			File outputfile = new File("image.png");
