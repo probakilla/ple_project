@@ -16,7 +16,7 @@ REST de hbase sur la même machine. Pour ce faire il faut lancer le script
 Pour lancer hbase ainsi que l'api interne, il est possible de lancer le script
 hbase.sh à la racine du projet (le package node pm2 est requis).
 
-Pour accéder au site, il suffit de lancer `npm deploy` à la racine du projet
+Pour accéder au site, il suffit de lancer `npm run deploy` à la racine du projet
 et d'ouvrir la page `dist/index.html` dans un navigateur.
 Pour fonctionner, cette page a besoin de l'api interne qui elle même a besoin
 du serveur REST de HBase.
