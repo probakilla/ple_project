@@ -5,6 +5,9 @@ const express = require("express");
 const cors = require("cors");
 const hbase = require("hbase");
 
+let hbasePort = process.env.REST_PORT || "8080";
+let apiPort = process.env.API_PORT || "4040";
+
 const DEFAULT_ROW = "default";
 const DEFAULT_COL = "zoom:0";
 
@@ -48,9 +51,9 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
         if (value !== null) {
           let data = value[0].$;
           let image = Buffer.from(data, "base64");
-          res.send(image);
+          res.status(200).send(image);
         } else {
-          res.send(DEFAULT_TILE);
+          res.status(404).send(DEFAULT_TILE);
         }
       } catch {}
     });
