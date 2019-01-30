@@ -3,7 +3,7 @@ import "proj4leaflet";
 import display from "./interface";
 const mercator = require("mercator-projection");
 const DEFAULT_ZOOM = 9;
-const DEFAULT_VIEW = [78.362161, -1542.925415]
+const DEFAULT_VIEW = [81.279718, -1494.261475]
 const MAX_ZOOM = 9;
 const ATTRIBUTION =
   'Zidane Data; <a href="http://www.zidane.com/">Zidane</a>' +
@@ -15,22 +15,6 @@ const API_URL =
   ":" +
   process.env.API_PORT +
   "/img/{y}/{x}/{z}.jpg";
-
-L.TileLayer.CustomLayer = L.TileLayer.extend({
-  getTileUrl: coords => {
-    let point = mercator.fromPointToLatLng({ x: coords.x, y: coords.y });
-    console.log(point);
-    return (
-      "http://young:9696/img/" +
-      point.lat +
-      "/" +
-      point.lng +
-      "/zoom:" +
-      coords.z +
-      ".jpg"
-    );
-  }
-});
 
 L.tileLayer.CustomLayer = () => {
   return new L.TileLayer.CustomLayer();

@@ -5,10 +5,6 @@ const express = require("express");
 const cors = require("cors");
 const hbase = require("hbase");
 
-let hbasePort = process.env.REST_PORT || "8080";
-let apiPort = process.env.API_PORT || "4040";
-let postName = process.env.POST_NAME || null;
-
 const DEFAULT_ROW = "default";
 const DEFAULT_COL = "zoom:0";
 
@@ -39,8 +35,33 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
   res.set("Content-Type", "image/jpg");
   let lat = Number(req.params.lat);
   let lng = Number(req.params.lng);
-  let newLat = 180 - (lat + 90);
-  let coords = newLat.toString() + "-" + lng.toString();
+  let newLat = 180 - lat;
+  let newLng = 360 - lng;
+  let coords = newLat.toString() + "-" + newLng.toString();
+  console.log(coords);
+  let zoom = "zoom:" + req.params.zoom;
+  hbase(config)
+    .table(process.env.HBASE_TABLE)
+    .row(coords)
+    .get(zoom, (error, value) => {
+      try {
+        if (value !== null) {
+          let data = value[0].$;
+          let image = Buffer.from(data, "base64");
+          res.send(image);
+        } else {
+          res.send(DEFAULT_TILE);
+        }
+      } catch {}
+    });
+});
+
+app.get("/debug/:lat/:lng/:zoom.jpg", (req, res, next) => {
+  res.setTimeout(0);
+  res.set("Content-Type", "image/jpg");
+  let lat = Number(req.params.lat);
+  let lng = Number(req.params.lng);
+  let coords = lat.toString() + "-" + lng.toString();
   console.log(coords);
   let zoom = "zoom:" + req.params.zoom;
   hbase(config)
@@ -71,6 +92,6 @@ let server = app.listen(apiPort, () => {
       hbasePort +
       "\n" +
       "Post name set to : " +
-      postName
+      process.env.POST_NAME
   );
 });

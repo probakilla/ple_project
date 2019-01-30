@@ -1,5 +1,6 @@
 echo "Getting hbase commands..."
-source /espace/Auber_PLE-ripoux/user-env.sh
+source /espace/Auber_PLE-005/user-env.sh 2> /dev/null
+source /espace/Auber_PLE-ripoux/user-env.sh 2> /dev/null
 
 echo "Getting environment variables..."
 envFile="/.env"
