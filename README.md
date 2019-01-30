@@ -1,5 +1,30 @@
 # README
 
+## Instructions de lancement
+
+Tout d'abord il faut configurer le fichier environnement (.env) avec les valeurs
+suivantes :
+- POST_NAME : le nom du post où l'on lance l'API et hbase rest
+- API_PORT : Le port qu'utilisera l'api interne
+- REST_PORT : Le port qu'utilisera l'api REST de HBase
+- TABLE_NAME : Le nom de la table où est inscrit les images
+
+Pour lancer l'api interne à notre programme, il faut avoir lancé le serveur
+REST de hbase sur la même machine. Pour ce faire il faut lancer le script
+`src/server/app.js` avec node ou un gestionnaire de serveurs tels que pm2.
+
+Pour lancer hbase ainsi que l'api interne, il est possible de lancer le script
+hbase.sh à la racine du projet (le package node pm2 est requis).
+
+Pour accéder au site, il suffit de lancer `npm deploy` à la racine du projet
+et d'ouvrir la page `dist/index.html` dans un navigateur.
+Pour fonctionner, cette page a besoin de l'api interne qui elle même a besoin
+du serveur REST de HBase.
+
+La page html peut être lancée depuis n'importe quel ordinateur relié au réseau
+du Cremi, alors que les deux autres éléments doivent être lancés sur une machine
+d'un des cluster du Cremi (avec la bonne variable dans le fichier .env)
+
 ## Connexion à HBase en JavaScript
 
 Pour permettre à HBase de recevoir les requêtes il faut lancer le serveur REST:
@@ -8,7 +33,6 @@ Pour permettre à HBase de recevoir les requêtes il faut lancer le serveur REST
 $ hbase rest start -p <port>
 ```
 
-Le port est optionnel (par défaut il me semble que c'est 8080)
 Après ça HBase peut recevoir des requêtes HTTP classiques (curl, fetch etc...)
 
 Documentation de l'API REST de HBase [ici](https://hbase.apache.org/book.html#_rest)
@@ -22,6 +46,7 @@ Pour configurer l'api interne ainsi que le front, un fichier .env doit contenir 
 - Port que l'api utilisera pour envoyer des requêtes.
 - Nom du post (Cremi) à qui envoyer des requêtes.
 - Nom de la table à utiliser pour la base de données HBase.
+
 > Exemple :
 >```bash
 >POST_NAME=batman
@@ -32,33 +57,11 @@ Pour configurer l'api interne ainsi que le front, un fichier .env doit contenir 
 
 ### Routes
 
-> GET `/img/:row&col`
-> Permet de récupérer dans HBase une image dans la ligne "row" et dans la colonne "col"
+> GET `/img/:lat/:lng/:zoom.jpg`
+> Permet de récupérer dans HBase une image dans la ligne "lat-lng" et dans la colonne "zoom:zoom"
 > Exemple :
 > ``` bash
-> $ curl "http://localhost:4040/img/69069&N:W"
-> ```
-
-## Specs HBase
-
-Table : pipin
-ColumnFamilies : zoom
-Rows : Code LatLong - XX-YYY
-XX = Latitude
-YYY = Longitude
-Families de families : zoom:0, zoom:1, zoom:2, zoom:3, ... , zoom:9
-
-### Examples
-
-> GET
->
-> ```bash
-> $ get "pipin", "XXYYY", "zoom:0"
-> ```
-> PUT
->
-> ```bash
-> $ put "pipin", "XXYYY", "zoom:9", "value"
+> $ curl "http://localhost:4040/img/12/23/9.jpg"
 > ```
 
 ## Spark
@@ -69,6 +72,3 @@ Families de families : zoom:0, zoom:1, zoom:2, zoom:3, ... , zoom:9
 >```
 
 Hdfs comporte 19910 fichiers hgt
-
-
-
