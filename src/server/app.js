@@ -1,5 +1,4 @@
 require("dotenv").config();
-const converter = require("./coordinatesConverter");
 const fetch = require("node-fetch");
 const express = require("express");
 const cors = require("cors");
@@ -7,6 +6,7 @@ const hbase = require("hbase");
 
 let hbasePort = process.env.REST_PORT || "8080";
 let apiPort = process.env.API_PORT || "4040";
+let postName = process.env.POST_NAME || "young";
 
 const DEFAULT_ROW = "default";
 const DEFAULT_COL = "zoom:0";
@@ -95,6 +95,6 @@ let server = app.listen(apiPort, () => {
       hbasePort +
       "\n" +
       "Post name set to : " +
-      process.env.POST_NAME
+      postName
   );
 });

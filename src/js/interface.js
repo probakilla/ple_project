@@ -27,4 +27,4 @@ class Display {
   }
 }
 
-module.exports = new Display();
+export default new Display();

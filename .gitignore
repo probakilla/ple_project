@@ -1,2 +1,4 @@
 node_modules
 .vscode
+spark_maven/.settings
+spark_maven/.classpath
