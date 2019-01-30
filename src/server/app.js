@@ -37,10 +37,8 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
   res.setTimeout(0);
   res.set("Content-Type", "image/jpg");
   let lat = Number(req.params.lat);
-  let lng = Number(req.params.lng);
   let newLat = 180 - lat;
-  let newLng = 360 - lng;
-  let coords = newLat.toString() + "-" + newLng.toString();
+  let coords = newLat.toString() + "-" + req.params.lng;
   console.log(coords);
   let zoom = "zoom:" + req.params.zoom;
   hbase(config)
@@ -75,9 +73,9 @@ app.get("/debug/:lat/:lng/:zoom.jpg", (req, res, next) => {
         if (value !== null) {
           let data = value[0].$;
           let image = Buffer.from(data, "base64");
-          res.send(image);
+          res.status(200).send(image);
         } else {
-          res.send(DEFAULT_TILE);
+          res.status(404).send(DEFAULT_TILE);
         }
       } catch {}
     });
