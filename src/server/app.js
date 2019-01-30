@@ -16,6 +16,8 @@ const config = {
   port: process.env.REST_PORT
 };
 
+const ZOOMS = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+
 let DEFAULT_TILE = "";
 
 const app = express();
@@ -37,14 +39,15 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
   res.setTimeout(0);
   res.set("Content-Type", "image/jpg");
   let lat = Number(req.params.lat);
-  let newLat = 180 - lat;
+  let zoom = Number(req.params.zoom);
+  let newLat = ZOOMS[zoom] - lat;
   let coords = newLat.toString() + "-" + req.params.lng;
   console.log(coords);
-  let zoom = "zoom:" + req.params.zoom;
+  let zoomCol = "zoom:" + req.params.zoom;
   hbase(config)
     .table(process.env.HBASE_TABLE)
     .row(coords)
-    .get(zoom, (error, value) => {
+    .get(zoomCol, (error, value) => {
       try {
         if (value !== null) {
           let data = value[0].$;

@@ -1,7 +1,7 @@
 import * as L from "leaflet";
 import display from "./interface";
 
-const DEFAULT_VIEW = [81.279718, -1494.261475]
+const DEFAULT_VIEW = [-64.646232, -1493.764326]
 const MAX_ZOOM = 9;
 const MIN_ZOOM = 0;
 const ATTRIBUTION =
