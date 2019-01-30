@@ -20,8 +20,10 @@ public class demification {
 	private final static int TILE_LENGHT = 1201;
 	private final static int BUFFER_SIZE = 2;
 	private final static int HIGHEST_HEIGHT = 9000;
+	private final static Color OCEAN_COLOR = new Color(16, 118, 217);
+	private final static Color ERROR_COLOR = OCEAN_COLOR;
 	
-	private static int[] convert_dem(PortableDataStream pds) {
+	private static int[] convertDem(PortableDataStream pds) {
 		DataInputStream dis = pds.open();
 		int cpt = 0;
 		int[] list_height = new int[TILE_LENGHT*TILE_LENGHT];
@@ -51,15 +53,14 @@ public class demification {
 	
 	private static Color[] getColorList (int[] heightArray) {
 		Color[] colorArray = new Color[TILE_LENGHT*TILE_LENGHT];
-		Color ocean_color = new Color(16, 118, 217);
 		for (int i = 0; i < heightArray.length; ++i) {
-			Color color = ocean_color;
+			Color color = OCEAN_COLOR;
 			if (heightArray[i] != 0 && heightArray[i] < HIGHEST_HEIGHT) {
 				int color_index = (int) (Math.sqrt(heightArray[i])*LIST_COLOR.length/Math.sqrt(HIGHEST_HEIGHT));
 				color = LIST_COLOR[color_index];
 			}
 			if (heightArray[i] > HIGHEST_HEIGHT) {// Invalid data
-				color = (i == 0) ? ocean_color : colorArray[i-1];
+				color = ERROR_COLOR;
 			}
 			colorArray[i] = color;
 		}
@@ -68,7 +69,7 @@ public class demification {
 	
 	public static BufferedImage imageFromDem (PortableDataStream pds) {
 		BufferedImage img = new BufferedImage(TILE_LENGHT, TILE_LENGHT, BufferedImage.TYPE_INT_RGB);
-		int [] heightArray = convert_dem(pds);
+		int [] heightArray = convertDem(pds);
 		if (heightArray == null) {
 			return null;
 		}
@@ -105,8 +106,8 @@ public class demification {
 		g2.setPaint(Color.WHITE);
 		g2.fillRect(0, 0, widthImg, heightImg);
 		g2.setColor(oldColor);
-		g2.drawImage(northImg, null, 0, 0);
-		g2.drawImage(southImg, null, 0, northImg.getHeight());
+		g2.drawImage(southImg, null, 0, 0);
+		g2.drawImage(northImg, null, 0, southImg.getHeight());
 		g2.dispose();
 		Image tmp = img.getScaledInstance(TILE_LENGHT, TILE_LENGHT, Image.SCALE_SMOOTH);
 		BufferedImage resizedImage = new BufferedImage(TILE_LENGHT, TILE_LENGHT, BufferedImage.TYPE_INT_RGB);

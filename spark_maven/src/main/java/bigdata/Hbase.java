@@ -9,13 +9,12 @@
 package bigdata;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -66,9 +65,8 @@ public class Hbase {
 			}
 		}
 		
-		public static String putDemImg (BufferedImage img, String filename, String zoomLevel) throws IOException {
+		public static String putDemImg (BufferedImage img, String key, String zoomLevel) throws IOException {
 			table = getTable();
-			String key = getDemCoordinates(filename.toUpperCase());
 			byte[] rowkey = Bytes.toBytes(key);
 			byte[] columnName = Bytes.toBytes(zoomLevel);
 			byte[] columnVar = Bytes.toBytes(encodeToString(img, "jpg"));
@@ -78,22 +76,28 @@ public class Hbase {
 			return key;
 		}
 		
-		public static BufferedImage getZidane() throws IOException {
+		public static BufferedImage getHbaseImg(String rowKey, String zoomLevel) throws IOException {
 			table = getTable();
 			BufferedImage image = null;
-			Get get = new Get(Bytes.toBytes("default"));
+			Get get = new Get(Bytes.toBytes(rowKey));
 			get.addFamily(FAMILY);
-			byte[] imgByte = table.get(get).getValue(FAMILY, Bytes.toBytes("0"));
+			byte[] imgByte = table.get(get).getValue(FAMILY, Bytes.toBytes(zoomLevel));
 			if (imgByte == null) {
-				System.out.println("Récupération échoué");
+				throw new IOException();
 			}
 			byte[] testByte = Base64.decode(Bytes.toString((imgByte)));
 			ByteArrayInputStream bis = new ByteArrayInputStream(testByte);
 			image = ImageIO.read(bis);
 			bis.close();
-			File outputfile = new File("image.png");
-			ImageIO.write(image, "png", outputfile);
 			return image;
+		}
+		
+		public static BufferedImage getZidane () {
+			try {
+				return getHbaseImg ("default", "0");
+			} catch (IOException e) {
+				return null;
+			}
 		}
 		
 		private static Table getTable () throws IOException {
@@ -128,7 +132,7 @@ public class Hbase {
 			return imageStr;
 		}
 
-		private static String getDemCoordinates(String filename) {
+		public static String getDemCoordinates(String filename) {
 			String cardLat = filename.substring(0, 1);
 			String cardLng = filename.substring(3, 4);
 			int lat = Integer.parseInt(filename.substring(1, 3));
@@ -136,12 +140,33 @@ public class Hbase {
 			if (cardLat.equals("S")) {
 				lat *= -1;
 			}
-			if (cardLng.equals("E")) {
+			if (cardLng.equals("W")) {
 				lng *= -1;
 			}
 			lat += 90;
 			lng += 180;
 			return new StringBuffer(Integer.toString(lat)).append("-").append(Integer.toString(lng)).toString();
+		}
+		
+		public static String rowKeyToDemName (String rowKey) {
+			String[] latLng = rowKey.split("-");
+			int lat = Integer.parseInt(latLng[0]);
+			int lng = Integer.parseInt(latLng[1]);
+			String cardLat = "N";
+			String cardLng = "E";
+			lat -= 90;
+			lng -= 180;
+			if (lat < 0)
+			{
+				cardLat = "S";
+				lat *= -1;
+			}
+			if (lng < 0)
+			{
+				cardLng = "W";
+				lng *= -1;
+			}
+			return new StringBuffer(cardLat).append(StringUtils.leftPad(Integer.toString(lat), 2, "0")).append(cardLng).append(StringUtils.leftPad(Integer.toString(lng), 3, "0")).toString();
 		}
 	}
 
