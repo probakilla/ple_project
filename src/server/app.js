@@ -1,80 +1,76 @@
 require("dotenv").config();
+const converter = require("./coordinatesConverter");
+const fetch = require("node-fetch");
 const express = require("express");
 const cors = require("cors");
-const app = express();
-const coordConv = require("./coordinatesConverter");
+const hbase = require("hbase");
 
 let hbasePort = process.env.REST_PORT || "8080";
 let apiPort = process.env.API_PORT || "4040";
 let postName = process.env.POST_NAME || null;
 
 const DEFAULT_ROW = "default";
-const DEFAULT_COL = "zoom:1";
-
-let DEFAULT_TILE = "not founod";
-
-function getDefaultTile() {
-    hbase()
-	.table(process.env.HBASE_TABLE)
-	.row(DEFAULT_ROW)
-	.get(DEFAULT_COL, (error, value) => {
-	    try {
-		let data = value[0].$;
-		DEFAULT_TILE = Buffer.from(data, "base64");
-	    } catch (error) {
-	    }
-	})
-}
+const DEFAULT_COL = "zoom:0";
 
 const config = {
-  host: process.env.POST_NAME,
+  host: "localhost",
   port: process.env.REST_PORT
 };
 
-const hbase = require("hbase");
+let DEFAULT_TILE = "";
 
+const app = express();
 app.use(cors());
 
-app.get("/img/:lat/:lng/:zoom", (req, res) => {
-    if (req.params.lat && req.params.lng && req.params.zoom) {
-	let coords = coordConv.toFileName(req.params.lat, req.params.lng);
-	let zoom = "zoom:" + req.params.zoom;
-	res.set("Content-Type", "image/png");
-	hbase()
-	    .table(process.env.HBASE_TABLE)
-	    .row(coords)
-	    .get(zoom, (error, value) => {
-		if (error) {
-		    try {
-			let img = DEFAULT_TILE;
-			res.send(img);
-		    } catch {}
-		} else {
-		    try {
-			let img = value[0].$;
-			if (error) console.error(error);
-			let data = Buffer.from(img, "base64");
-			res.send(data);
-		    } catch (err) {
-			//console.error(err);
-		    }
-		}
-	    })
-    }
-})
+function getDefaultTileHBase() {
+  hbase(config)
+    .table(process.env.HBASE_TABLE)
+    .row(DEFAULT_ROW)
+    .get(DEFAULT_COL, (error, value) => {
+      if (value !== null) {
+        let data = value[0].$;
+        DEFAULT_TILE = Buffer.from(data, "base64");
+      }
+    });
+}
 
-app.listen(apiPort, () => {
-    getDefaultTile();
-    console.log(
-	"====== API LINSTENING ======" +
-	    "\n" +
-	    "API listening on port : " +
-	    apiPort +
-	    "\n" +
-	    "HBase requests on port : " +
-	    hbasePort +
-	    "\n" +
-	    "Post name set to : " +
-	    postName
-    );
+app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
+  res.setTimeout(0);
+  res.set("Content-Type", "image/jpg");
+  let lat = Number(req.params.lat);
+  let lng = Number(req.params.lng);
+  let newLat = 180 - (lat + 90);
+  let coords = newLat.toString() + "-" + lng.toString();
+  console.log(coords);
+  let zoom = "zoom:" + req.params.zoom;
+  hbase(config)
+    .table(process.env.HBASE_TABLE)
+    .row(coords)
+    .get(zoom, (error, value) => {
+      try {
+        if (value !== null) {
+          let data = value[0].$;
+          let image = Buffer.from(data, "base64");
+          res.send(image);
+        } else {
+          res.send(DEFAULT_TILE);
+        }
+      } catch {}
+    });
+});
+
+let server = app.listen(apiPort, () => {
+  getDefaultTileHBase();
+  console.log(
+    "====== API LINSTENING ======" +
+      "\n" +
+      "API listening on port : " +
+      apiPort +
+      "\n" +
+      "HBase requests on port : " +
+      hbasePort +
+      "\n" +
+      "Post name set to : " +
+      postName
+  );
 });

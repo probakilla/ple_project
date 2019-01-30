@@ -17,53 +17,49 @@ test("formatNumber tests longitude", () => {
     expect(converter.formatNumber(1111, LNG_SIZE)).toBe("1111");
 })
 
-test("formatNumber tests errors", () => {
+test("formatNumber tests errors param format", () => {
     expect(() => {
 	converter.formatNumber(-1, LAT_SIZE)
-    }).toThrow(Error);
+    }).toThrow("NaN");
     expect(() => {
 	converter.formatNumber("str", LAT_SIZE)
-    }).toThrow(Error);
+    }).toThrow("NaN");
 })
 
 test("toFileName tests both pos", () => {
-    expect(converter.toFileName(1, 1)).toBe("N01E001");
-    expect(converter.toFileName(11, 11)).toBe("N11E011");
-    expect(converter.toFileName(111, 111)).toBe("N111E111");
-    expect(converter.toFileName(1111, 1111)).toBe("N1111E1111");
-})
-
-test("toFileName tests lat neg lng pos", () => {
-    expect(converter.toFileName(-1, 1)).toBe("S01E001");
-    expect(converter.toFileName(-11, 11)).toBe("S11E011");
-    expect(converter.toFileName(-111, 111)).toBe("S111E111");
-    expect(converter.toFileName(-1111, 1111)).toBe("S1111E1111");
-})
-
-test("toFileName tests lat pos lng neg", () => {
-    expect(converter.toFileName(1, -1)).toBe("N01W001");
-    expect(converter.toFileName(11, -11)).toBe("N11W011");
-    expect(converter.toFileName(111, -111)).toBe("N111W111");
-    expect(converter.toFileName(1111, -1111)).toBe("N1111W1111");
-})
-
-test("toFileName tests both neg", () => {
-    expect(converter.toFileName(-1, -1)).toBe("S01W001");
-    expect(converter.toFileName(-11, -11)).toBe("S11W011");
-    expect(converter.toFileName(-111, -111)).toBe("S111W111");
-    expect(converter.toFileName(-1111, -1111)).toBe("S1111W1111");
+    expect(converter.toFileName(0, 0)).toBe("S90W180");
+    expect(converter.toFileName(90, 180)).toBe("N00E000");
+    expect(converter.toFileName(180, 360)).toBe("N90E180");
 })
 
 test("toFileName errors", () => {
     expect(() => {
 	converter.toFileName("str", 1);
     }).toThrow(Error);
-    
+
     expect(() => {
 	converter.toFileName(1, "str");
     }).toThrow(Error);
-    
+
     expect(() => {
 	converter.toFileName("str", "str");
     }).toThrow(Error);
+})
+
+test("toFileName tests errors numbers range", () => {
+    expect(() => {
+	converter.toFileName(380, 380)
+    }).toThrow("Out of range");
+    expect(() => {
+	converter.toFileName(-10, 999)
+    }).toThrow("Out of range");
+    expect(() => {
+	converter.toFileName(200, -1)
+    }).toThrow("Out of range");
+    expect(() => {
+	converter.toFileName(-100, -1)
+    }).toThrow("Out of range");
+    expect(() => {
+	converter.toFileName(4545, 11111)
+    }).toThrow("Out of range");
 })
