@@ -3,11 +3,11 @@
 }
 
 .footer-size {
-  padding-bottom: 2rem;
+  padding-bottom: 5rem;
 }
 
 .bot-margin {
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 }
 
 .btn-zidane {
@@ -20,4 +20,20 @@
 
 .leaflet-container-zidane {
   background: url("https://cdn.vox-cdn.com/thumbor/609RaBZ-u44nkiifOV0l19nI9Hc=/0x0:3316x4798/1200x800/filters:focal(1287x1508:1817x2038)/cdn.vox-cdn.com/uploads/chorus_image/image/60392505/962744798.jpg.0.jpg");
+}
+
+.zidane-leaderprice {
+  background: url("http://image.noelshack.com/fichiers/2016/03/1453504803-leader.jpg");
+}
+
+.zidane-leaderprice2 {
+  background: url("https://vignette.wikia.nocookie.net/desencyclopedie/images/d/db/Zinedine_zidane_leader_price-c5ba3.jpg/revision/latest?cb=20120501113314");
+}
+
+.zidane-dior {
+  background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF1BsRFgXOfxBO1Bkq4tHx4Cc4v1OpdleuenE2kf4aqJVX8Xwt");
+}
+
+.zidane-clap {
+  background: url("https://www.lexpress.fr/medias/80/zidane_473.jpg");
 }

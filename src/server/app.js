@@ -41,7 +41,7 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
   let lat = Number(req.params.lat);
   let zoom = Number(req.params.zoom);
   console.log(zoom)
-  let newLat = ZOOMS[zoom] - lat - 1; 
+  let newLat = ZOOMS[zoom] - lat - 1;
   let coords = newLat.toString() + "-" + req.params.lng;
   console.log(coords);
   let zoomCol = "zoom:" + req.params.zoom;
@@ -49,30 +49,6 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
     .table(process.env.HBASE_TABLE)
     .row(coords)
     .get(zoomCol, (error, value) => {
-      try {
-        if (value !== null) {
-          let data = value[0].$;
-          let image = Buffer.from(data, "base64");
-          res.status(200).send(image);
-        } else {
-          res.status(404).send(DEFAULT_TILE);
-        }
-      } catch {}
-    });
-});
-
-app.get("/debug/:lat/:lng/:zoom.jpg", (req, res, next) => {
-  res.setTimeout(0);
-  res.set("Content-Type", "image/jpg");
-  let lat = Number(req.params.lat);
-  let lng = Number(req.params.lng);
-  let coords = lat.toString() + "-" + lng.toString();
-  console.log(coords);
-  let zoom = "zoom:" + req.params.zoom;
-  hbase(config)
-    .table(process.env.HBASE_TABLE)
-    .row(coords)
-    .get(zoom, (error, value) => {
       try {
         if (value !== null) {
           let data = value[0].$;
