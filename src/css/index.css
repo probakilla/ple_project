@@ -1,11 +1,23 @@
 .bot-spacing {
-    padding-top: 2rem;
+  padding-top: 2rem;
 }
 
 .footer-size {
-    padding-bottom: 2rem;
+  padding-bottom: 2rem;
 }
 
 .bot-margin {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
+}
+
+.btn-zidane {
+  background: url("http://scd.en.rfi.fr/sites/english.filesrfi/imagecache/rfi_16x9_1024_578/sites/images.rfi.fr/files/aef_image/2018-05-31t114224z_927252871_rc1f8d63d4e0_rtrmadp_3_soccer-spain-mad-zidane.jpg");
+  background-position: -9px -7px;
+  background-repeat: no-repeat;
+  background-size: 150px 43px;
+  padding-left: 41px;
+}
+
+.leaflet-container-zidane {
+  background: url("https://cdn.vox-cdn.com/thumbor/609RaBZ-u44nkiifOV0l19nI9Hc=/0x0:3316x4798/1200x800/filters:focal(1287x1508:1817x2038)/cdn.vox-cdn.com/uploads/chorus_image/image/60392505/962744798.jpg.0.jpg");
 }
