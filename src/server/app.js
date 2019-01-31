@@ -40,7 +40,8 @@ app.get("/img/:lat/:lng/:zoom.jpg", (req, res, next) => {
   res.set("Content-Type", "image/jpg");
   let lat = Number(req.params.lat);
   let zoom = Number(req.params.zoom);
-  let newLat = ZOOMS[zoom] - lat;
+  console.log(zoom)
+  let newLat = ZOOMS[zoom] - lat - 1; 
   let coords = newLat.toString() + "-" + req.params.lng;
   console.log(coords);
   let zoomCol = "zoom:" + req.params.zoom;
