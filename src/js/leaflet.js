@@ -3,7 +3,7 @@ import display from "./interface";
 
 const DEFAULT_VIEW = [-64.646232, -1493.764326]
 const MAX_ZOOM = 9;
-const MIN_ZOOM = 0;
+const MIN_ZOOM = 1;
 const ATTRIBUTION =
   'Zidane Data; <a href="http://www.zidane.com/">Zidane</a>' +
   " Le meilleur joueur";
